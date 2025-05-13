@@ -20154,3 +20154,44 @@ button {
     .dx-radiogroup.pretty-radio-group .dx-item .dx-radiobutton-text {
         font-weight: 400;
     }
+
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+    .form-group input {
+        width: 100%;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        outline: none;
+        padding: 8px 0;
+        font-size: 16px;
+        background: transparent;
+        transition: border-color 0.3s;
+        border-radius: 0;
+    }
+
+        .form-group input:focus {
+            border-bottom: 2px solid #007bff;
+        }
+
+    .form-group label {
+        position: absolute;
+        left: 0;
+        top: 10px;
+        font-size: 16px;
+        color: #777;
+        transition: 0.3s ease;
+    }
+
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label {
+        top: -12px;
+        font-size: 14px;
+        color: #007bff;
+    }
+
+.form-control:focus {
+    box-shadow: none !important;
+}

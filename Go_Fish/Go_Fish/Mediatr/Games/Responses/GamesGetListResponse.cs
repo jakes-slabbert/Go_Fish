@@ -1,9 +1,9 @@
-using GoFish.Data.Entities;
+using GoFish.Models;
 
 namespace Mediatr.Games.Responses
 {
     public class GamesGetListResponse
     {
-        public List<Game> Games { get; set; }
+        public List<GameDto> Games { get; set; }
     }
 }

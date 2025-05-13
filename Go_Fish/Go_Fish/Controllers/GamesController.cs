@@ -2,14 +2,15 @@
 using GoFish.Data;
 using Mediatr.Games.Commands;
 using Mediatr.Games.Queries;
-using Mediatr.Games.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Serilog;
+using GoFish.Mediatr.GameCards.Commands;
 
 namespace GoFish.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class GamesController : BaseController
     {
         private readonly IMediator _mediator;
@@ -30,30 +31,57 @@ namespace GoFish.Controllers
         /// <summary>
         /// Create a new game.
         /// </summary>
-        [HttpPost]
-        public async Task<ActionResult<GamesGetByIdResponse>> CreateGame([FromBody] CreateGameCommand command, CancellationToken cancellationToken)
+        [HttpPost("CreateGame")]
+        [IgnoreAntiforgeryToken]
+        public async Task<string> CreateGame([FromBody] CreateGameCommand command)
         {
+            var cancellationToken = new CancellationToken();
             var gameId = await _mediator.Send(command, cancellationToken);
-            var game = await _mediator.Send(new GetGameByIdQuery(gameId), cancellationToken);
 
-            if (game == null)
-                return NotFound();
+            if (gameId == default)
+                return JsonConvert.SerializeObject(new { Success = false });
 
-            return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
+            return JsonConvert.SerializeObject(new { Success = true, Game = gameId });
         }
 
-        /// <summary>
-        /// Get a game by its ID.
-        /// </summary>
-        [HttpGet("{id:guid}")]
-        public async Task<ActionResult<GamesGetByIdResponse>> GetGameById(Guid id, CancellationToken cancellationToken)
+        [HttpGet("View/{id:guid}")]
+        public async Task<IActionResult> View(Guid id)
         {
-            var game = await _mediator.Send(new GetGameByIdQuery(id), cancellationToken);
+            try
+            {
+                var cancellationToken = new CancellationToken();
+                var game = await _mediator.Send(new GetGameByIdQuery(id), cancellationToken);
 
-            if (game == null)
-                return NotFound();
+                if (game == null)
+                    return NotFound();
 
-            return Ok(game);
+                return View("View", game.Game); // Renders Views/Games/View.cshtml with the game data
+            }
+            catch (Exception exception) 
+            {
+                Log.Logger.Error($"{nameof(GamesController)} - {nameof(View)} failed. \r\n Message: \r\n {exception.Message} \r\n StackTrace: \r\n {exception.StackTrace}");
+                return RedirectToAction(nameof(Index), "Games");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DrawCard(Guid gameId, Guid? playerId = null)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DrawCardCommand
+                {
+                    GameId = gameId,
+                    PlayerId = playerId
+                });
+
+                return Json(result); // Return cards to update UI
+            }
+            catch (Exception exception)
+            {
+                Log.Logger.Error($"{nameof(GamesController)} - {nameof(DrawCard)} failed. \r\n Message: \r\n {exception.Message} \r\n StackTrace: \r\n {exception.StackTrace}");
+                return StatusCode(500, "Something went wrong.");
+            }
         }
     }
 }

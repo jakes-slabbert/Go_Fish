@@ -1,0 +1,188 @@
+﻿@model GameDto
+
+@using GoFish.Models;
+
+@{
+    ViewData["Title"] = "Game: " + Model.Name;
+    var isCompleted = Model.IsCompleted;
+}
+
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background-color: white;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-primary">@Model.Name</h2>
+
+            <div class="mt-2">
+                @if (isCompleted)
+                {
+                    <span class="badge bg-success">Completed</span>
+                    @if (Model.CompletedAt.HasValue)
+                    {
+                        <small class="text-muted ms-2">
+                            @Model.CompletedAt.Value.ToString("dd MMM yyyy HH:mm")
+                        </small>
+                    }
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">In Progress</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="DrawCard" method="post">
+
+    </form>
+
+    <div class="d-flex flex-wrap align-items-end mb-3">
+        <input type="hidden" name="GameId" value="@Model.Id" />
+        <button type="submit" class="border-0 bg-transparent p-0" style="cursor: pointer;">
+            <div id="deck" class="position-relative me-3" style="width: 60px; height: 80px;">
+                @for (int i = 0; i < Model.Deck.Count; i++)
+                {
+                    <div class="card bg-secondary text-white text-center position-absolute d-flex justify-content-center align-items-center p-0"
+                         style="width: 60px; height: 80px; top:@(-i * 0.1)px; left:@(-i * 0.1)px; z-index:@i;">
+                        <div style="font-size: 5rem; position: relative; top: -12px;">
+                            🂠
+                        </div>
+                    </div>
+                }
+            </div>
+        </button>
+        <div class="alert alert-secondary">
+            <strong id="deck-count">@Model.Deck.Count</strong> card(s) remaining in the deck.
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h4>Players</h4>
+            <ul class="list-group">
+                @foreach (var player in Model.Players)
+                {
+                    bool isWinner = player.UserId.HasValue && Model.WinnerPlayerId.HasValue && player.UserId == Model.WinnerPlayerId;
+                    bool isCurrentTurn = player.UserId.HasValue && Model.CurrentTurnPlayerId.HasValue && player.UserId == Model.CurrentTurnPlayerId;
+
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <strong>@player.Name</strong>
+                                @if (isWinner)
+                                {
+                                    <span class="badge bg-success ms-2">Winner</span>
+                                }
+                                @if (isCurrentTurn)
+                                {
+                                    <span class="badge bg-info text-dark ms-2">Current Turn</span>
+                                }
+                            </div>
+                        </div>
+
+                        @if (player.Cards != null && player.Cards.Any())
+                        {
+                            <div class="d-flex flex-wrap">
+                                @foreach (var card in player.Cards)
+                                {
+                                    if (isCurrentTurn)
+                                    {
+                                        var suitSymbol = card.Suit switch
+                                        {
+                                            "Hearts" => "♥️",
+                                            "Diamonds" => "♦️",
+                                            "Clubs" => "♣️",
+                                            "Spades" => "♠️",
+                                            _ => "?"
+                                        };
+
+                                        <div class="card shadow-sm text-center me-2 mb-2 p-2" style="width: 60px; height: 80px;">
+                                            <div class="text-muted small">@card.Rank</div>
+                                            <div class="fs-4">@suitSymbol</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="card bg-secondary text-white text-center me-2 mb-2 p-2" style="width: 60px; height: 80px;">
+                                            <div class="fs-4">🂠</div> <!-- Unicode for a face-down card -->
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        }
+                    </li>
+                }
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="/Games" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Back to Games
+        </a>
+    </div>
+</div>
+
+<script>
+    function drawCard(gameId, playerId = null) {
+        $.ajax({
+            type: "POST",
+            url: "/Games/DrawCard",
+            data: {
+                gameId: gameId,
+                playerId: playerId // optional
+            },
+            success: function (cards) {
+                // Add the newly drawn cards to the hand
+                for (let card of cards) {
+                    if (card.playerId) { // only show if it's a player's card
+                        let $card = $("<div>", {
+                            class: "card text-center p-2",
+                            style: "width: 60px; height: 80px;"
+                        }).html(`<div class="fw-bold">${card.Rank}</div><div>${getSuitSymbol(card.Suit)}</div>`);
+
+                        $("#player-hand").append($card);
+                    }
+                }
+
+                // Optionally update deck count display
+                updateDeckCount(-cards.length);
+            },
+            error: function () {
+                alert("Failed to draw card.");
+            }
+        });
+    }
+
+    function getSuitSymbol(suit) {
+        switch (suit) {
+            case "Hearts": return "♥️";
+            case "Diamonds": return "♦️";
+            case "Clubs": return "♣️";
+            case "Spades": return "♠️";
+            default: return "?";
+        }
+    }
+
+    function updateDeckCount(change) {
+        let $counter = $("#deck-count");
+        let count = parseInt($counter.text());
+        $counter.text(count - change);
+    }
+
+    // Example: bind to deck click
+    $(document).ready(function () {
+        $("#deck").on("click", function () {
+            drawCard("@Model.Id"); // inject gameId server-side
+        });
+    });
+</script>
