@@ -152,11 +152,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.MapFallbackToFile("index.html").AllowAnonymous(); // Sets index.html as the default landing page
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Asset}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

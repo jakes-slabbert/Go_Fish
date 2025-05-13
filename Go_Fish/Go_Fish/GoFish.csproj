@@ -43,7 +43,6 @@
     <Folder Include="Data\StoredProcedures\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Logs\" />
-    <Folder Include="Mediatr\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
