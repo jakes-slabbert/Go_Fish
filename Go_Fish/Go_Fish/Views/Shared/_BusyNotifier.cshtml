@@ -1,0 +1,42 @@
+@{
+    var title = string.Empty;
+    if (ViewBag.BusyNotifier != null)
+    {
+        var users = new System.Collections.Generic.List<string>(ViewBag.BusyNotifier.Users);
+        users.ForEach(u =>
+        {
+            if (u != User.Identity.Name)
+            {
+                if (title.Length > 0)
+                    title += Html.Raw(", ");
+                title += u;
+            }
+        });
+    }
+}
+@{
+    if (title != null && title != string.Empty)
+    {
+        <script type="text/javascript">
+
+            const BusyToast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 4500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            BusyToast.fire({
+                icon: 'warning',
+                title: '<b>@Html.Encode(title)</b><br> is also editing this item'
+            })
+
+        </script>
+    }
+}
+

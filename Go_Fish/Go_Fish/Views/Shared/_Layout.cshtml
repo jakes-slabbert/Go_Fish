@@ -1,0 +1,130 @@
+﻿@using GoFishControllers
+
+@*@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@inject Linteg.Data.AppDbContext DbContext
+@inject SignInManager<Linteg.Data.Models.AppUser> SignInManager
+*@
+
+<!DOCTYPE html>
+<html lang="en"
+      data-layout="vertical"
+      data-topbar="light"
+      data-sidebar="dark"
+      data-sidebar-size="lg"
+      data-sidebar-image="none"
+      data-preloader="enabled"
+      data-layout-mode="light"
+      data-layout-width="fluid"
+      data-layout-position="fixed"
+      data-layout-style="default"
+      data-bs-theme="light"
+      data-theme="default"
+      data-theme-colors="default">
+<head>
+    <partial name="_Layout_Head" />
+    <title>@ViewData["Title"]</title>
+    <partial name="_Layout_Head_CSS" />
+    @RenderSection("Styles", false)
+
+</head>
+
+<body>
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+        <partial name="_TopMenu" />
+        <partial name="_Menu" />
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            @* @Html.Form() *@
+            <div class="page-content" id="uberApp">
+                <div class="container-fluid">
+                    @RenderSection("DeleteForm", false)
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary()
+                    @RenderBody()
+                </div>
+                <!-- container-fluid -->
+            </div>
+            @* @Html.CloseFormTag() *@
+            <!-- End Page-content -->
+        </div>
+        <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+    <!--start back-to-top-->
+
+    <button onclick="topFunction()" class="btn btn-secondary btn-icon" id="back-to-top">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+    <!--end back-to-top-->
+    @*Please wait spinner*@
+    <div class="loader" style="display:none">
+        <div class="loader--text"></div>
+        <div class="container-l">
+            <div class="loader-l"></div>
+        </div>
+
+        <div class="loader-bg"></div>
+    </div>
+
+    <!--preloader-->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_BusyNotifier" />
+    <partial name="_Alerts" />
+    <partial name="_Scripts" />
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+
+        function SetupOnBeforeUnload() {
+            if (this.location.pathname.includes('Edit')) {
+                // Try to get the Id value
+                var id = this.location.pathname.split("/");
+
+                // Exit if we don't have
+                if (id.length === 0)
+                    return;
+
+                // Set the closingCode function to ensure we unregister the cached key
+                window.onbeforeunload = function () {
+                    var id = this.location.pathname.split("/");
+                    var controller = id[1];
+                    var action = id[2];
+                    id = id[id.length - 1];
+
+                    var dataToSend = {
+                        "controller": controller,
+                        "action": action,
+                        "id": id
+                    };
+
+                    // un-register that we editing the page
+                    try {
+                        // navigator.sendBeacon("(Url.Action<HomeController>(c => c.RemoveBusyNotifier()))", JSON.stringify(dataToSend));
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    return null;
+                }
+            }
+        }
+        SetupOnBeforeUnload();
+    </script>
+
+</body>
+</html>

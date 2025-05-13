@@ -1,0 +1,24 @@
+@using HtmlHelpers
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+
+@*Excluded because of the bundle and minification did not work*@
+<script src="/lib/exceljs/exceljs.min.js"></script>
+<script src="/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+
+@*<script src="/js/output/all.js" asp-append-version="true"></script>*@
+
+@* Configured in the Bundleconfig.json file*@
+<environment names="Development">
+    @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/output/all.js")
+</environment>
+<environment names="Staging,Production">
+    <script src="/js/output/all.js" asp-append-version="true"></script>
+</environment>
+
+
+
+@*<environment names="Development">
+    <strong>Environment is Development</strong>
+    <script src="/js/app.js"></script>
+</environment>
+*@

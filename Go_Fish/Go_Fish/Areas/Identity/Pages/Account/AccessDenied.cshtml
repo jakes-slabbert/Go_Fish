@@ -1,0 +1,26 @@
+@page
+@using GoFishControllers;
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Access denied";
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="text-center pt-4">
+            <div class="">
+                <img src="~/images/wired-lineal-1738-no-entry.gif" title="Access Denied" />
+            </div>
+            <div class="mt-n4">
+                <h1 class="display-1 fw-medium text-danger">Access denied</h1>
+                <a href="@(Url.Action("Index", "Home"))" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

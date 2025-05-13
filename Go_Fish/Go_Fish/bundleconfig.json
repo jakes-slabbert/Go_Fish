@@ -1,0 +1,88 @@
+[
+    {
+      "outputFileName": "wwwroot/js/output/all.js",
+      "inputFiles": [
+        "wwwroot/lib/node-waves/waves.js",
+        "wwwroot/lib/simplebar/simplebar.js",
+        "wwwroot/lib/feather-icons/feather.js",
+        "wwwroot/lib/filesaver.js/filesaver.js",
+        "wwwroot/lib/nprogress/nprogress.js",
+        "wwwroot/lib/lord-icon/lord-icon-2.1.0.js",
+        "wwwroot/lib/momentjs/moment.min.js",
+        "wwwroot/lib/font-awesome/js/all.min.js",
+        "wwwroot/js/layout.js",
+        "wwwroot/js/dhtmlxgantt.js",
+        //<!-- App js -->
+        "wwwroot/js/app.js",
+        //<!-- Site js -->
+        "wwwroot/js/site.js"
+      ],
+      "minify": {
+        "enabled": true,
+        "commentMode": "all"
+      }
+    },
+    {
+      "outputFileName": "wwwroot/js/output/jquery.js",
+      "inputFiles": [
+        "wwwroot/lib/jquery/jquery.min.js",
+        "wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js",
+        "wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
+        "wwwroot/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"
+      ],
+      "minify": {
+        "enabled": false,
+        "commentMode": "none"
+      }
+    },
+    {
+      "outputFileName": "wwwroot/js/output/devExt.js",
+      "inputFiles": [
+      "wwwroot/lib/devextreme/js/dx.all.js",
+        "wwwroot/lib/devextreme/js/dx.aspnet.mvc.min.js",
+      "wwwroot/lib/devextreme-aspnet-data/js/dx.aspnet.data.min.js",
+      "wwwroot/lib/vue/dist/vue.min.js"
+      ],
+      "minify": {
+        "enabled": false,
+        "commentMode": "none"
+      }
+    },
+    {
+      "outputFileName": "wwwroot/css/output/all.css",
+      "inputFiles": [
+        "wwwroot/css/bootstrap.min.css",
+        "wwwroot/css/icons.min.css",
+        "wwwroot/css/app.css",
+        "wwwroot/css/custom.min.css",
+        "wwwroot/lib/sweetalert2/dist/sweetalert2.min.css",
+        "wwwroot/lib/nprogress/nprogress.css",
+        "wwwroot/lib/fontawesome-free/css/all.css",
+        "wwwroot/lib/devextreme/css/dx.light.compact.css",
+        "wwwroot/lib/devextreme/css/dx.dark.compact.css",
+        "wwwroot/css/dhtmlxgantt.css"
+      ],
+      "minify": {
+        "enabled": false,
+        "commentMode": "none"
+      }
+    },
+    {
+      "outputFileName": "wwwroot/css/site.min.css",
+      "inputFiles": [
+        "wwwroot/css/site.css"
+      ]
+    },
+    {
+      "outputFileName": "wwwroot/css/custom.min.css",
+      "inputFiles": [
+        "wwwroot/css/custom.css"
+      ]
+    },
+    {
+      "outputFileName": "wwwroot/js/output/csf.min.min.js",
+      "inputFiles": [
+        "wwwroot/js/output/csf.min.js"
+      ]
+    }
+  ]

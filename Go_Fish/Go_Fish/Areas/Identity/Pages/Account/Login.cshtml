@@ -1,0 +1,126 @@
+@page
+@model LoginModel
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    body {
+        background-color: #f7f8fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        max-width: 400px;
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        display: block;
+        margin: 0 auto 20px;
+        width: 150px;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+        .form-group input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            outline: none;
+            padding: 8px 0;
+            font-size: 16px;
+            background: transparent;
+            transition: border-color 0.3s;
+            border-radius: 0;
+        }
+
+            .form-group input:focus {
+                border-bottom: 2px solid #007bff;
+                
+            }
+
+        .form-group label {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            font-size: 16px;
+            color: #777;
+            transition: 0.3s ease;
+        }
+
+        .form-group input:focus ~ label,
+        .form-group input:not(:placeholder-shown) ~ label {
+            top: -12px;
+            font-size: 14px;
+            color: #007bff;
+        }
+
+    .form-control:focus {
+        box-shadow: none !important;
+    }
+
+    .password-container {
+        position: relative;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+</style>
+
+<div class="login-container">
+    <img src="/images/logo_1_nobg.png" alt="Logo" class="logo">
+    <form id="account" method="post">
+        <div class="form-group">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Email" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group password-container">
+            <input asp-for="Input.Password" type="password" class="form-control" autocomplete="current-password" placeholder="Password" />
+            <i class="fa fa-eye toggle-password"></i>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" asp-for="Input.RememberMe" />
+            <label asp-for="Input.RememberMe" class="form-check-label">Remember me</label>
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit">Sign In</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <a id="forgot-password" asp-page="./ForgotPassword" class="text-decoration-none">Forgot your password?</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.toggle-password').click(function () {
+            let input = $(this).prev('input');
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                input.attr('type', 'password');
+                $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+    });
+</script>

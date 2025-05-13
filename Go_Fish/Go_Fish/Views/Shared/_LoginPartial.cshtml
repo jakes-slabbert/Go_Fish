@@ -1,0 +1,26 @@
+@using GoFishData.Entities
+@using Microsoft.AspNetCore.Identity
+@using GoFishControllers;
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<div class="ms-sm-3 header-item mr-3">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(Url.Action("Index", "Home"))">
+            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" onclick="$(this).closest('form').submit();" tooltip="Logout">
+                <i class="bx bx-exit fs-22"></i>
+            </button>
+
+        </form>
+    }
+    else
+    {
+        <span class="text-start ms-xl-2">
+            <span class="   d-xl-inline-block ms-1 fw-medium user-name-text">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </span>
+        </span>
+    }
+</div>

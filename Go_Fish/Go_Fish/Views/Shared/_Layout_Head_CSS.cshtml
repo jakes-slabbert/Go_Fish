@@ -1,0 +1,25 @@
+<!-- Bundled Css -->
+<link href="~/css/output/all.css" rel="stylesheet" asp-append-version="true" />
+
+<!-- Fortis Pro Customisation -->
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+<!-- DevExtreme theme -->
+<link rel="stylesheet" href="/lib/devextreme/css/dx.common.min.css">
+
+<link rel="dx-theme" data-theme="generic.light.compact" href="/lib/devextreme/css/dx.light.compact.min.css" data-active="false">
+<link rel="dx-theme" data-theme="generic.dark.compact" href="/lib/devextreme/css/dx.dark.compact.min.css" data-active="false">
+
+<!-- JQuery -->
+<script src="/js/output/jquery.js" asp-append-version="true"></script>
+
+<!-- DevExtreme library -->
+<script src="/js/output/devExt.js" asp-append-version="true"></script>
+<script src="/js/devextreme-vue.js"></script>
+
+<script>
+    setTimeout(function () {
+        DevExpress.ui.themes.current(window.localStorage.getItem("dx-theme") || "generic.light.compact");
+    }, 250);
+    
+</script>

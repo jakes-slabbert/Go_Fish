@@ -1,0 +1,109 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+#app .card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#app .card-header {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    gap: 8px;
+    background-color: transparent !important;
+    background: transparent !important;
+    padding: 0.8rem 0.8rem 0 !important;
+}
+
+#app .card-title {
+    font-weight: bold !important;
+}
+
+#app .card-icon {
+    font-size: 1.5em;
+}
+
+#app .card-body {
+    font-size: 1.4em;
+    font-weight: bold;
+    background-color: #fff !important;
+    background: #fff !important;
+    border-radius: 20px;
+}
+
+#app .widget-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#app .widget-card-container {
+    padding: 10px 20px 0 20px;
+}
+
+#app .widget-header {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+#app .widget-body {
+    font-size: 16px;
+    color: #666;
+}
+
+#app .card-container {
+    display: flex;
+    justify-content: center;
+}
+
+#app .dx-card {
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+#app .card-content {
+    margin-top: 10px;
+}
+
+#app .list-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+    #app .list-item:last-child {
+        border-bottom: none;
+    }

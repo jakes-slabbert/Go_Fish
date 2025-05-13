@@ -1,0 +1,50 @@
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: support@themesbrand.com
+File: Custom Css File
+*/
+
+
+$btn-padding-y: .4rem;
+
+
+.form-switch-md {
+    padding-left: 2.5rem;
+    min-height: 22px;
+    line-height: 22px;
+
+    .form-check-input {
+        width: 55px;
+        height: 20px;
+        left: -0.5rem;
+        position: relative;
+    }
+
+    .form-check-label {
+        vertical-align: middle;
+    }
+}
+
+.page-title-box {
+    padding: 10px 1.5rem;
+    background-color: var(--vz-secondary-bg);
+    box-shadow: var(--vz-page-title-box-shadow);
+    border-bottom: 1px solid var(--vz-page-title-border);
+    margin: -23px -1.5rem 0px -1.5rem;
+}
+
+.navbar-menu .navbar-nav .nav-sm .nav-link:hover {
+    color: var(--vz-vertical-menu-sub-item-hover-color);
+    background-color: rgb(255 255 255 / 10%)
+}
+
+.navbar-menu .navbar-nav .nav-sm .nav-link.active:before {
+    background-color: var(--vz-vertical-menu-item-active-color);
+    opacity: 1;
+}
+
+[data-theme=default]:root {
+    --vz-vertical-menu-bg: rgb(21, 35, 82);
+}

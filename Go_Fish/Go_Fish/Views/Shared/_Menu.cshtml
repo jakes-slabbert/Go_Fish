@@ -1,0 +1,89 @@
+@using GoFishControllers
+<!-- ========== App Menu ========== -->
+<div class="app-menu navbar-menu">
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <!-- Dark Logo-->
+        <a href="#" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="/images/logo_1_nobg_no_text.png" alt="" height="46">
+            </span>
+            <span class="logo-lg">
+                <img src="/images/logo_1_nobg.png" alt="" height="63">
+            </span>
+        </a>
+        <!-- Light Logo-->
+        <a href=#" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="/images/logo_1_nobg_no_text.png" alt="" height="46">
+            </span>
+            <span class="logo-lg">
+                <img src="/images/logo_1_nobg.png" alt="" height="63">
+            </span>
+        </a>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+            <i class="ri-record-circle-line"></i>
+        </button>
+    </div>
+
+    <div id="scrollbar">
+        <div class="container-fluid">
+            <div id="two-column-menu"></div>
+            <ul class="navbar-nav" id="navbar-nav" style="margin: 1rem 0 0 0;">
+                @* <li class="nav-item" style="font-size: 1.1em;">
+                    <a href="@Url.Action("Index", "Dashboard")" class="nav-link menu-link">
+                        <i class="ri-dashboard-2-line"></i> <span style="padding: 0 0 5px 0;" data-key="t-Dashboard">Dashboard</span>
+                    </a>
+                </li>  *@
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Asset")" class="nav-link menu-link" style="font-size: 1.1em; font-weight: 400; color: #2a5fc1">
+                        <i class="ri-home-line"></i> <span style="padding: 0 0 5px 0;" data-key="t-Asset">Assets</span>
+                    </a>
+                </li>
+                @*<li class="menu-title"><span data-key="t-menu">Administration</span></li>*@
+                @* <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarAdministration" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-settings-4-line"></i> <span data-key="t-Administration">Administration</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarAdministration">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="@(Url.Action<UserController>(c=>c.Index()))" class="nav-link">
+                                    <i class="mdi mdi-account-group"></i>
+                                    <span>Users</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li> *@ <!-- end Administration Menu -->
+                @* <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarTest" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-3-line"></i> <span data-key="t-Test">Test</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarTest">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item"> *@
+                                @* <a href="@(Url.Action<FrameworkConfigController>(c=>c.Index()))" class="nav-link menu-link">
+                                    <i class="ri-bug-line"></i>
+                                    <span>Numbering Config</span>
+                                </a> *@
+                           @*  </li>
+                            <li class="nav-item">  *@
+                                @* <a href="@(Url.Action<FrameworkConfigController>(c=>c.Migrations()))" class="nav-link">
+                                    <i class="fa-solid fa-database"></i>
+                                    <span>Migrations</span>
+                                </a> *@
+                            @* </li>
+                        </ul>
+                    </div>
+                </li> *@ <!-- end Test Menu -->
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+
+    <div class="sidebar-background"></div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay"></div>

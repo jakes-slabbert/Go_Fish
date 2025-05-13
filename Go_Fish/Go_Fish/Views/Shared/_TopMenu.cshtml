@@ -1,0 +1,129 @@
+@using GoFishControllers
+
+<style>
+</style>
+
+<header id="page-topbar">
+    <div class="layout-width">
+        <div class="navbar-header">
+            <div class="d-flex">
+                <!-- LOGO -->
+                <div class="navbar-brand-box horizontal-logo">
+                    @* <a href="@(Url.Action<HomeController>(c=>c.Index()))" class="logo logo-dark"> *@
+                        <span class="logo-sm">
+                            <img src="/images/logo_1_nobg.png" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="/images/logo-dark.png" alt="">
+                        </span>
+                    </a>
+
+                    @* <a href="@(Url.Action<HomeController>(c=>c.Index()))" class="logo logo-light"> *@
+                        <span class="logo-sm">
+                            <img src="/images/logo_1_nobg.png" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="/images/logo-light.png" alt="">
+                        </span>
+                    </a>
+                </div>
+
+                <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" id="topnav-hamburger-icon">
+                        <div class="PT_ej hamburger-icon" tabindex="0" aria-label="Close navigation" data-testid="collapse-leftpane-button">
+                            <svg viewBox="0 0 20 20" fill="#fff" width="16" height="16" aria-hidden="true" tabindex="-1" class="icon_b407e05873 GD1dz noFocusStyle_43edc8446a" data-testid="icon"><path d="M7.24 9.444a.77.77 0 0 0 0 1.116l4.363 4.21a.84.84 0 0 0 1.157 0 .77.77 0 0 0 0-1.116l-3.785-3.652 3.785-3.653a.77.77 0 0 0 0-1.116.84.84 0 0 0-1.157 0L7.24 9.443Z"></path></svg></div>
+                </button>
+
+            </div>
+
+            <div class="d-flex align-items-center">
+
+                <div class="ms-1 header-item d-none d-sm-flex" id="notificationDropdown">
+                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">
+                        <i class="bx bx-bell fs-22"></i>
+                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger d-none"><span id="unreadTotal">0</span><span class="visually-hidden">unread messages</span></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 " aria-labelledby="page-header-notifications-dropdown" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 58px);">
+                        <div class="dropdown-head bg-primary bg-pattern rounded-top">
+                            <div class="px-2 pt-2">
+                                <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
+                                    <li class="nav-item waves-effect waves-light" role="presentation">
+                                        <a class="nav-link active" data-toggle="tab" href="#messages-tab" role="tab" aria-selected="true">
+                                            Messages
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-content position-relative" id="notificationItemsTabContent">
+
+                            <div class="tab-pane fade py-2 ps-2 active show" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
+                                <div data-simplebar="init" style="max-height: 300px;" class="pe-2 simplebar-scrollable-y">
+                                    <div class="simplebar-wrapper" style="margin: 0px -8px 0px 0px;">
+                                        <div class="simplebar-height-auto-observer-wrapper">
+                                            <div class="simplebar-height-auto-observer">                                            </div>
+                                        </div>
+                                        <div class="simplebar-mask">
+                                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;">
+                                                    <div class="simplebar-content" style="padding: 0px 8px 0px 0px;">
+                                                        <div class="my-3 text-center view-all" style="display: block;">
+                                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">
+                                                                View
+                                                                All Messages <i class="ri-arrow-right-line align-middle"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="simplebar-placeholder" style="width: 312px; height: 522px;"></div>
+                                    </div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 172px; display: block; transform: translate3d(0px, 0px, 0px);"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="notification-actions" id="notification-actions">
+                                <div class="d-flex text-muted justify-content-center">
+                                    Select <div id="select-content" class="text-body fw-semibold px-1">0</div> Result <button type="button" class="btn btn-link link-danger p-0 ms-3" data-toggle="modal" data-bs-target="#removeNotificationModal">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <partial name="_LoginPartial" />
+                <environment names="Development">
+                    <span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Development</span>
+                </environment>
+                <environment names="UAT">
+                    <span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> UAT</span>
+                </environment>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- removeNotificationModal -->
+<div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="NotificationModalbtn-close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2 text-center">
+                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                        <h4>Are you sure ?</h4>
+                        <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
+                </div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

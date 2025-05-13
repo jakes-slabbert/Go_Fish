@@ -1,0 +1,46 @@
+[
+  {
+    "outputFile": "wwwroot/css/app.css",
+    "inputFile": "wwwroot/scss/app.scss",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "options": {
+      "sourceMap": false
+    }
+  },
+  {
+    "outputFile": "wwwroot/css/custom.css",
+    "inputFile": "wwwroot/scss/custom.scss",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "options": {
+      "sourceMap": true
+    }
+  },
+  {
+    "outputFile": "wwwroot/css/bootstrap.css",
+    "inputFile": "wwwroot/scss/bootstrap.scss",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "options": {
+      "sourceMap": true
+    }
+  },
+  {
+    "outputFile": "wwwroot/css/icons.css",
+    "inputFile": "wwwroot/scss/icons.scss",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "options": {
+      "sourceMap": true
+    }
+  }
+]

@@ -1,0 +1,45 @@
+﻿/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: support@themesbrand.com
+File: Custom Css File
+*/
+.form-switch-md {
+  padding-left: 2.5rem;
+  min-height: 22px;
+  line-height: 22px;
+}
+.form-switch-md .form-check-input {
+  width: 55px;
+  height: 20px;
+  left: -0.5rem;
+  position: relative;
+}
+.form-switch-md .form-check-label {
+  vertical-align: middle;
+}
+
+.page-title-box {
+  padding: 10px 1.5rem;
+  background-color: var(--vz-secondary-bg);
+  box-shadow: var(--vz-page-title-box-shadow);
+  border-bottom: 1px solid var(--vz-page-title-border);
+  margin: -23px -1.5rem 0px -1.5rem;
+}
+
+.navbar-menu .navbar-nav .nav-sm .nav-link:hover {
+  color: var(--vz-vertical-menu-sub-item-hover-color);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-menu .navbar-nav .nav-sm .nav-link.active:before {
+  background-color: var(--vz-vertical-menu-item-active-color);
+  opacity: 1;
+}
+
+[data-theme=default]:root {
+  --vz-vertical-menu-bg: #fff;
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf-8,%7B%22version%22:3,%22sourceRoot%22:%22%22,%22sources%22:%5B%22file:///C:/Users/Jaco/Source/Repos/Goldwagen/GoFish/wwwroot/scss/custom.scss%22%5D,%22names%22:%5B%5D,%22mappings%22:%22AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAYA;EACI;EACA;EACA;;AAEA;EACI;EACA;EACA;EACA;;AAGJ;EACI;;;AAIR;EACI;EACA;EACA;EACA;EACA;;;AAGJ;EACI;EACA;;;AAGJ;EACI;EACA;;;AAGJ;EACI%22%7D */
