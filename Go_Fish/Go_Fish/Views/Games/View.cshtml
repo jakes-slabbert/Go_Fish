@@ -184,7 +184,7 @@
     async function drawCard(gameId, playerId = null) {
         const payload = {
             GameId: gameId,
-            PlayerId: playerId
+            PlayerId: mainPlayerId
         };
 
         try {
@@ -197,7 +197,7 @@
             });
 
             if (!response.ok) {
-                showToast("Failed to draw card.", "danger");
+                showMessage("Failed to draw card.", "danger");
                 return;
             }
 
@@ -206,7 +206,7 @@
             // Clear current hand before redrawing it
             $("#player-hand").empty();
 
-            let playerIdToMatch = playerId || getCurrentPlayerId(); 
+            let playerIdToMatch = mainPlayerId;
             let deckCount = 0;
 
             for (let card of cards) {
@@ -225,9 +225,12 @@
             }
 
             updateDeckCount(deckCount);
+
+            location.reload();
+
         } catch (err) {
             console.error(err);
-            showToast("An error occurred while drawing a card.", "danger");
+            showMessage("An error occurred while drawing a card.", "danger");
         }
     }
 
@@ -248,6 +251,16 @@
     function enablePlayerActions() {
         $("#deck").prop("disabled", false);
         $(".ask-card").addClass("clickable");
+
+        let playerCards = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Players.SelectMany(p => p.Cards).ToList()));
+
+        console.log(playerCards);
+
+        if (playerCards.length < 1) {
+            showMessage("Your turn! Click on the deck to deal the cards.");
+            return;
+        }
+
         showMessage("Your turn! Click a card rank to ask.");
     }
 
