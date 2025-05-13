@@ -206,7 +206,7 @@
             // Clear current hand before redrawing it
             $("#player-hand").empty();
 
-            let playerIdToMatch = playerId || getCurrentPlayerId(); // Assume you have this available
+            let playerIdToMatch = playerId || getCurrentPlayerId(); 
             let deckCount = 0;
 
             for (let card of cards) {
@@ -260,7 +260,7 @@
     async function askCard(rank, targetPlayerId) {
         const payload = {
             GameId: gameId,
-            RequestingPlayerId: mainPlayerId, // assuming you have this global or can get it from the DOM
+            RequestingPlayerId: mainPlayerId,
             TargetPlayerId: targetPlayerId,
             Rank: rank
         };
