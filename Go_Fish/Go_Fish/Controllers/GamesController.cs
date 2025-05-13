@@ -9,7 +9,6 @@ using Serilog;
 using GoFish.Mediatr.GameCards.Commands;
 using Microsoft.EntityFrameworkCore;
 using GoFish.Models;
-using GoFish.Data.Enumerations;
 
 namespace GoFish.Controllers
 {
