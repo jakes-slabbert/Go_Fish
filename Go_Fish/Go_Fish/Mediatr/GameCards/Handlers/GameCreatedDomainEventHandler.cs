@@ -1,5 +1,6 @@
 ﻿using GoFish.Data;
 using GoFish.Data.Entities;
+using GoFish.Data.Enumerations;
 using GoFish.Mediatr.GameCards.DomainEvents;
 using GoFish.Services.CurrentUser;
 using MediatR;
@@ -25,7 +26,7 @@ namespace GoFish.Mediatr.GameCards.Handlers
             {
                 var currentUserId = _currentUserService.UserId;
                 var allCards = await _context.Cards.ToListAsync(cancellationToken);
-                var suits = new[] { "Spades", "Hearts", "Diamonds", "Clubs" }; // Suites needed
+                var suits = Enum.GetValues(typeof(Suite)).Cast<Suite>(); ; // Suites needed
 
                 var gameCards = new List<GameCard>();
 
@@ -40,7 +41,8 @@ namespace GoFish.Mediatr.GameCards.Handlers
                             Name = $"{card.Rank} of {suit}",
                             InDeck = true,
                             CreatedOn = DateTimeOffset.UtcNow,
-                            CreatedById = currentUserId.HasValue ? currentUserId.Value : throw new ArgumentNullException(nameof(currentUserId))
+                            CreatedById = currentUserId.HasValue ? currentUserId.Value : throw new ArgumentNullException(nameof(currentUserId)),
+                            Suite = suit
                         });
                     }
                 }

@@ -5,22 +5,27 @@ using GoFish.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using GoFish.Models;
+using GoFish.Services.CurrentUser;
 
 namespace Mediatr.Games.Handlers
 {
     public class GetGameByIdQueryHandler : IRequestHandler<GetGameByIdQuery, GamesGetByIdResponse>
     {
         private readonly AppDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public GetGameByIdQueryHandler(AppDbContext context)
+        public GetGameByIdQueryHandler(AppDbContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
         public async Task<GamesGetByIdResponse> Handle(GetGameByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
+                var userId = _currentUserService.UserId ?? throw new ArgumentNullException(nameof(_currentUserService.UserId));
+
                 var game = await _context.Games
                     .Include(g => g.Players)
                     .SingleOrDefaultAsync(g => g.Id == request.Id, cancellationToken);
@@ -53,9 +58,18 @@ namespace Mediatr.Games.Handlers
                         Deck = deckCards,
                         Players = game.Players.Select(p => new PlayerDto
                         {
+                            Id = p.Id,
                             UserId = p.UserId,
-                            Name = p.Name
-                        }).ToList()
+                            Name = p.Name,
+                            Cards = _context.GameCards.Include(g => g.Card).Where(g => g.OwnedByGamePlayerId == p.Id).Select(g => new CardDto 
+                            {
+                                Id = g.CardId,
+                                Rank = g.Card.Rank,
+                                Suit = $"{g.Suite}",
+                                PlayerId = p.Id,
+                            }).ToList(),
+                        }).ToList(),
+                        MainPlayerId = game.Players.Single(p => p.UserId == userId).Id
                     }
                 };
             }

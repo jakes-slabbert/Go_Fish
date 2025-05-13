@@ -29,6 +29,7 @@ namespace GoFish.Mediatr.GameCards.Handlers
                     .FirstOrDefaultAsync(g => g.Id == request.GameId, cancellationToken);
 
                 var gameCards = await _context.GameCards
+                    .Include(g => g.Card)
                     .Where(g => g.GameId == request.GameId)
                     .ToListAsync(cancellationToken);
 
@@ -68,11 +69,15 @@ namespace GoFish.Mediatr.GameCards.Handlers
 
                 await _context.SaveChangesAsync(cancellationToken);
 
+                var allOtherCards = gameCards.Where(g => newCards.Select(c => c.Id).ToList().Contains(g.Id) == false);
+
+                newCards.AddRange(allOtherCards);
+
                 return newCards.Select(card => new CardDto
                 {
                     Id = card.CardId,
                     Rank = card.Card.Rank,
-                    //Suit = card., TODO: Figure this out
+                    Suit = $"{card.Suite}",
                     PlayerId = card.OwnedByGamePlayerId
                 }).ToList();
             }

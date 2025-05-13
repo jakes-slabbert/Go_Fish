@@ -35,6 +35,7 @@ namespace Mediatr.Games.Handlers
                         Name = a.Name,
                         Players = a.Players.Select(p => new PlayerDto 
                         {
+                            Id = p.Id,
                             UserId = p.UserId,
                             Name = p.Name
                         }).ToList(),

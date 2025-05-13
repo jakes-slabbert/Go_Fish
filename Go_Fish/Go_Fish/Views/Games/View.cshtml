@@ -1,10 +1,10 @@
 ﻿@model GameDto
-
-@using GoFish.Models;
+@using GoFish.Models
 
 @{
     ViewData["Title"] = "Game: " + Model.Name;
     var isCompleted = Model.IsCompleted;
+    var isMyTurn = Model.CurrentTurnPlayerId == Model.MainPlayerId;
 }
 
 <style>
@@ -13,6 +13,15 @@
         border-radius: 6px;
         background-color: white;
     }
+
+    .clickable {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+        .clickable:hover {
+            transform: scale(1.1);
+        }
 </style>
 
 <div class="container mt-4">
@@ -39,14 +48,10 @@
         </div>
     </div>
 
-    <form asp-action="DrawCard" method="post">
-
-    </form>
-
     <div class="d-flex flex-wrap align-items-end mb-3">
-        <input type="hidden" name="GameId" value="@Model.Id" />
-        <button type="submit" class="border-0 bg-transparent p-0" style="cursor: pointer;">
-            <div id="deck" class="position-relative me-3" style="width: 60px; height: 80px;">
+        <input type="hidden" id="game-id" value="@Model.Id" />
+        <button type="button" id="deck" class="border-0 bg-transparent p-0" style="cursor: pointer;" @(isMyTurn ? "" : "disabled")>
+            <div class="position-relative me-3" style="width: 60px; height: 80px;">
                 @for (int i = 0; i < Model.Deck.Count; i++)
                 {
                     <div class="card bg-secondary text-white text-center position-absolute d-flex justify-content-center align-items-center p-0"
@@ -69,13 +74,18 @@
             <ul class="list-group">
                 @foreach (var player in Model.Players)
                 {
-                    bool isWinner = player.UserId.HasValue && Model.WinnerPlayerId.HasValue && player.UserId == Model.WinnerPlayerId;
-                    bool isCurrentTurn = player.UserId.HasValue && Model.CurrentTurnPlayerId.HasValue && player.UserId == Model.CurrentTurnPlayerId;
+                    bool isWinner = Model.WinnerPlayerId.HasValue && player.Id == Model.WinnerPlayerId;
+                    bool isCurrentTurn = Model.CurrentTurnPlayerId.HasValue && player.Id == Model.CurrentTurnPlayerId;
+                    bool isYou = player.Id == Model.MainPlayerId;
 
                     <li class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <strong>@player.Name</strong>
+                                @if (isYou)
+                                {
+                                    <span class="badge bg-primary ms-2">You</span>
+                                }
                                 @if (isWinner)
                                 {
                                     <span class="badge bg-success ms-2">Winner</span>
@@ -87,80 +97,138 @@
                             </div>
                         </div>
 
-                        @if (player.Cards != null && player.Cards.Any())
-                        {
-                            <div class="d-flex flex-wrap">
-                                @foreach (var card in player.Cards)
+                        <div class="d-flex flex-wrap" id="player-@player.Id-hand">
+                            @foreach (var card in player.Cards)
+                            {
+                                if (isYou)
                                 {
-                                    if (isCurrentTurn)
+                                    var suitSymbol = card.Suit switch
                                     {
-                                        var suitSymbol = card.Suit switch
-                                        {
-                                            "Hearts" => "♥️",
-                                            "Diamonds" => "♦️",
-                                            "Clubs" => "♣️",
-                                            "Spades" => "♠️",
-                                            _ => "?"
-                                        };
+                                        "Hearts" => "♥️",
+                                        "Diamonds" => "♦️",
+                                        "Clubs" => "♣️",
+                                        "Spades" => "♠️",
+                                        _ => "?"
+                                    };
 
-                                        <div class="card shadow-sm text-center me-2 mb-2 p-2" style="width: 60px; height: 80px;">
-                                            <div class="text-muted small">@card.Rank</div>
-                                            <div class="fs-4">@suitSymbol</div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="card bg-secondary text-white text-center me-2 mb-2 p-2" style="width: 60px; height: 80px;">
-                                            <div class="fs-4">🂠</div> <!-- Unicode for a face-down card -->
-                                        </div>
-                                    }
+                                    <div class="card shadow-sm text-center me-2 mb-2 p-2 clickable ask-card" data-rank="@card.Rank" style="width: 60px; height: 80px;">
+                                        <div class="text-muted small">@card.Rank</div>
+                                        <div style="font-size: 2rem; position: relative; top: -8px;">@suitSymbol</div>
+                                    </div>
                                 }
-                            </div>
-                        }
+                                else
+                                {
+                                    <div class="card bg-secondary text-white text-center me-2 mb-2 p-2" style="width: 60px; height: 80px;">
+                                        <div style="font-size: 5rem; position: relative; top: -41px; right: 5px;">🂠</div>
+                                    </div>
+                                }
+                            }
+                        </div>
                     </li>
                 }
-
-
             </ul>
         </div>
     </div>
 
     <div class="mt-4">
-        <a href="/Games" class="btn btn-outline-secondary">
+        <div id="message-box" class="alert alert-info d-none"></div>
+        <a href="/Games" class="btn btn-outline-secondary mt-3">
             <i class="fas fa-arrow-left me-2"></i> Back to Games
         </a>
     </div>
 </div>
 
 <script>
-    function drawCard(gameId, playerId = null) {
-        $.ajax({
-            type: "POST",
-            url: "/Games/DrawCard",
-            data: {
-                gameId: gameId,
-                playerId: playerId // optional
-            },
-            success: function (cards) {
-                // Add the newly drawn cards to the hand
-                for (let card of cards) {
-                    if (card.playerId) { // only show if it's a player's card
-                        let $card = $("<div>", {
-                            class: "card text-center p-2",
-                            style: "width: 60px; height: 80px;"
-                        }).html(`<div class="fw-bold">${card.Rank}</div><div>${getSuitSymbol(card.Suit)}</div>`);
+    const gameId = "@Model.Id";
+    const mainPlayerId = "@Model.MainPlayerId";
+    const currentTurnPlayerId = "@Model.CurrentTurnPlayerId";
+    const isMyTurn = mainPlayerId === currentTurnPlayerId;
+    const players = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Players));
 
-                        $("#player-hand").append($card);
-                    }
+    $(document).ready(async function () {
+        if (isMyTurn) {
+            enablePlayerActions();
+        } else {
+            setTimeout(() => computerPlays(), 1000);
+        }
+
+        $(".ask-card").on("click", function () {
+            if (!isMyTurn) return;
+
+            const rank = $(this).data("rank");
+            const opponent = players.find(p => p.Id !== mainPlayerId);
+            askCard(rank, opponent.Id);
+        });
+
+        $("#deck").on("click", async function () {
+            if (!isMyTurn) return;
+            await drawCard("@Model.Id"); // inject gameId server-side
+        });
+    });
+
+    function bindAskCardClicks() {
+        document.querySelectorAll(".ask-card").forEach(el => {
+            el.addEventListener("click", () => {
+                const rank = el.getAttribute("data-rank");
+                const targetPlayerId = prompt("Ask which player? Enter player ID:");
+                if (targetPlayerId) {
+                    askCard(rank, targetPlayerId);
+                }
+            });
+        });
+    }
+
+    // Call on page load
+    document.addEventListener("DOMContentLoaded", bindAskCardClicks);
+
+    async function drawCard(gameId, playerId = null) {
+        const payload = {
+            GameId: gameId,
+            PlayerId: playerId
+        };
+
+        try {
+            const response = await fetch("/Games/DrawCard", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                showToast("Failed to draw card.", "danger");
+                return;
+            }
+
+            const cards = await response.json();
+
+            // Clear current hand before redrawing it
+            $("#player-hand").empty();
+
+            let playerIdToMatch = playerId || getCurrentPlayerId(); // Assume you have this available
+            let deckCount = 0;
+
+            for (let card of cards) {
+                if (card.PlayerId === playerIdToMatch) {
+                    const $card = $("<div>", {
+                        class: "card text-center p-2",
+                        style: "width: 60px; height: 80px;"
+                    }).html(`<div class="fw-bold">${card.Rank}</div><div>${getSuitSymbol(card.Suit)}</div>`);
+
+                    $("#player-hand").append($card);
                 }
 
-                // Optionally update deck count display
-                updateDeckCount(-cards.length);
-            },
-            error: function () {
-                alert("Failed to draw card.");
+                if (!card.PlayerId) {
+                    deckCount++;
+                }
             }
-        });
+
+            updateDeckCount(deckCount);
+        } catch (err) {
+            console.error(err);
+            showToast("An error occurred while drawing a card.", "danger");
+        }
     }
 
     function getSuitSymbol(suit) {
@@ -173,16 +241,167 @@
         }
     }
 
-    function updateDeckCount(change) {
-        let $counter = $("#deck-count");
-        let count = parseInt($counter.text());
-        $counter.text(count - change);
+    function updateDeckCount(count) {
+        $("#deck-count").text(count);
     }
 
-    // Example: bind to deck click
-    $(document).ready(function () {
-        $("#deck").on("click", function () {
-            drawCard("@Model.Id"); // inject gameId server-side
+    function enablePlayerActions() {
+        $("#deck").prop("disabled", false);
+        $(".ask-card").addClass("clickable");
+        showMessage("Your turn! Click a card rank to ask.");
+    }
+
+    function showMessage(msg, type = "info") {
+        const box = $("#message-box");
+        box.removeClass("d-none alert-info alert-success alert-danger").addClass(`alert-${type}`);
+        box.text(msg);
+    }
+
+    async function askCard(rank, targetPlayerId) {
+        const payload = {
+            GameId: gameId,
+            RequestingPlayerId: mainPlayerId, // assuming you have this global or can get it from the DOM
+            TargetPlayerId: targetPlayerId,
+            Rank: rank
+        };
+
+        try {
+            const res = await fetch("/Games/AskCard", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error("Failed to ask.");
+
+            const result = await res.json();
+
+            showMessage(result.Message, result.Success ? "success" : "danger");
+
+            if (result.Success) {
+                updateHands(result.UpdatedCards);
+                updateDeck(result.UpdatedCards);
+                updateTurn(result.NextPlayerId);
+
+                if (result.GameIsOver) {
+                    showMessage("🎉 The game is over!", "success");
+                }
+            }
+        } catch (e) {
+            showMessage("Something went wrong.", "danger");
+        }
+    }
+
+    function updateHands(cards) {
+        const hands = {};
+
+        // Group cards by PlayerId
+        cards.forEach(card => {
+            if (!hands[card.PlayerId]) hands[card.PlayerId] = [];
+            hands[card.PlayerId].push(card);
         });
-    });
+
+        // Clear and update each player's hand
+        Object.keys(hands).forEach(playerId => {
+            const handContainer = document.getElementById(`player-${playerId}-hand`);
+            if (!handContainer) return;
+
+            handContainer.innerHTML = "";
+
+            hands[playerId].forEach(card => {
+                const isYou = playerId === mainPlayerId;
+                let cardHtml;
+
+                if (isYou) {
+                    const suitSymbol = getSuitSymbol(card.Suit);
+                    cardHtml = `
+                        <div class="card shadow-sm text-center me-2 mb-2 p-2 clickable ask-card" data-rank="${card.Rank}" style="width: 60px; height: 80px;">
+                            <div class="text-muted small">${card.Rank}</div>
+                            <div style="font-size: 2rem; position: relative; top: -8px;">${suitSymbol}</div>
+                        </div>`;
+                } else {
+                    cardHtml = `
+                        <div class="card bg-secondary text-white text-center me-2 mb-2 p-2" style="width: 60px; height: 80px;">
+                            <div style="font-size: 5rem; position: relative; top: -41px; right: 5px;">🂠</div>
+                        </div>`;
+                }
+
+                handContainer.insertAdjacentHTML("beforeend", cardHtml);
+            });
+        });
+
+        // Rebind ask-card click events
+        bindAskCardClicks();
+    }
+
+    function updateDeck(cards) {
+        const unowned = cards.filter(c => c.PlayerId === null);
+        const deckCountEl = document.getElementById("deck-count");
+        if (deckCountEl) {
+            deckCountEl.innerText = unowned.length;
+        }
+
+        const deckEl = document.getElementById("deck");
+        if (deckEl) {
+            const container = deckEl.querySelector("div.position-relative");
+            container.innerHTML = "";
+
+            for (let i = 0; i < unowned.length; i++) {
+                container.insertAdjacentHTML("beforeend", `
+                    <div class="card bg-secondary text-white text-center position-absolute d-flex justify-content-center align-items-center p-0"
+                         style="width: 60px; height: 80px; top:${-i * 0.1}px; left:${-i * 0.1}px; z-index:${i};">
+                        <div style="font-size: 5rem; position: relative; top: -12px;">🂠</div>
+                    </div>
+                `);
+            }
+        }
+    }
+
+    function updateTurn(nextPlayerId) {
+        document.querySelectorAll(".badge.bg-info").forEach(b => b.remove());
+
+        const playerItems = document.querySelectorAll(".list-group-item");
+        playerItems.forEach(item => {
+            if (item.querySelector(`#player-${nextPlayerId}-hand`)) {
+                const nameDiv = item.querySelector("div > strong");
+                nameDiv.insertAdjacentHTML("beforeend", `<span class="badge bg-info text-dark ms-2">Current Turn</span>`);
+            }
+        });
+
+        // Optionally disable deck click if it's not your turn
+        const deckBtn = document.getElementById("deck");
+        if (deckBtn) {
+            deckBtn.disabled = nextPlayerId !== mainPlayerId;
+        }
+        isMyTurn = !isMyTurn;
+    }
+
+    async function computerPlays() {
+        try {
+            const response = await fetch("/Games/ComputerTurn", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(gameId)
+            });
+
+            if (!response.ok) {
+                showMessage("Computer turn failed.", "danger");
+                return;
+            }
+
+            const result = await response.json();
+            showMessage(result.Message, "info");
+
+            updateHands(result.UpdatedCards);
+            updateTurn(result.NextPlayerId);
+
+            if (result.GameIsOver) {
+                showMessage("🎉 The game is over!", "success");
+            }
+
+        } catch (err) {
+            console.error(err);
+            showMessage("An error occurred during the computer's turn.", "danger");
+        }
+    }
 </script>

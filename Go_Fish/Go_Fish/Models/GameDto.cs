@@ -17,5 +17,7 @@
         public List<CardDto> Deck { get; set; }
 
         public List<PlayerDto> Players { get; set; }
+
+        public Guid? MainPlayerId { get; set; }
     }
 }

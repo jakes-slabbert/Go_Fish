@@ -89,6 +89,12 @@ namespace Mediatr.Games.Handlers
                 _context.Games.Add(game);
                 await _context.SaveChangesAsync(cancellationToken);
 
+                var currentTurnPlayerId = _context.GamePlayers.Single(g => g.UserId == currentUserId && g.GameId == game.Id);
+
+                game.CurrentTurnPlayerId = currentTurnPlayerId.Id;
+
+                _context.Attach(game);
+                await _context.SaveChangesAsync(cancellationToken);
                 // Raise domain event
                 await _mediator.Publish(new GameCreatedDomainEvent(game.Id), cancellationToken);
 
