@@ -1,4 +1,5 @@
 ﻿using GoFish.Data.Entities;
+using GoFish.Services;
 using GoFishData.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -36,17 +37,41 @@ namespace GoFishData
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<GamePlayer>()
+                .HasOne(p => p.CreatedBy)
+                .WithMany()
+                .HasForeignKey(p => p.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Game>()
                 .HasOne(g => g.WinnerPlayer)
                 .WithMany()
                 .HasForeignKey(g => g.WinnerPlayerId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Game>()
+                .HasOne(p => p.CreatedBy)
+                .WithMany()
+                .HasForeignKey(p => p.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Game>()
                 .HasOne(g => g.CurrentTurnPlayer)
                 .WithMany()
                 .HasForeignKey(g => g.CurrentTurnPlayerId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<GameCard>()
+                .HasOne(g => g.OwnedByGamePlayer)
+                .WithMany()
+                .HasForeignKey(g => g.OwnedByGamePlayerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<GameCard>()
+                .HasOne(p => p.CreatedBy)
+                .WithMany()
+                .HasForeignKey(p => p.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Move>()
                 .HasOne(m => m.AskingPlayer)
@@ -58,7 +83,22 @@ namespace GoFishData
                 .HasOne(m => m.TargetPlayer)
                 .WithMany()
                 .HasForeignKey(m => m.TargetPlayerId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Move>()
+                .HasOne(m => m.CreatedBy)
+                .WithMany()
+                .HasForeignKey(m => m.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Move>()
+                .HasOne(m => m.TargetPlayer)
+                .WithMany()
+                .HasForeignKey(m => m.TargetPlayerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(builder);
+            CardSeeder.Seed(builder);
         }
     }
 }

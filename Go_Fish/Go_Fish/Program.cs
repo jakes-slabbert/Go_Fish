@@ -89,7 +89,6 @@ builder.Services.AddHttpsRedirection(options =>
 
 // ----------- Custom Services -----------
 builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
-builder.Services.AddTransient<ICurrencyHelper, CurrencyHelper>();
 // Register MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 

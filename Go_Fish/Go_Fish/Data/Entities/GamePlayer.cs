@@ -8,7 +8,7 @@ namespace GoFish.Data.Entities
         public virtual Game Game { get; set; }
 
         public Guid? UserId { get; set; }
-        public virtual AppUser User { get; set; }
+        public virtual AppUser? User { get; set; }
 
         public bool IsComputer { get; set; }
         public int PlayerOrder { get; set; }

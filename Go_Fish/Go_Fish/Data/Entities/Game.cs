@@ -6,13 +6,13 @@
         public DateTime? CompletedAt { get; set; }
 
         public Guid? WinnerPlayerId { get; set; }
-        public GamePlayer WinnerPlayer { get; set; }
+        public virtual GamePlayer WinnerPlayer { get; set; }
 
         public Guid? CurrentTurnPlayerId { get; set; }
-        public GamePlayer CurrentTurnPlayer { get; set; }
+        public virtual GamePlayer CurrentTurnPlayer { get; set; }
 
-        public ICollection<GamePlayer> Players { get; set; }
-        public ICollection<GameCard> Cards { get; set; }
-        public ICollection<Move> Moves { get; set; }
+        public virtual ICollection<GamePlayer> Players { get; set; }
+        public virtual ICollection<GameCard> Cards { get; set; }
+        public virtual ICollection<Move> Moves { get; set; }
     }
 }
