@@ -93,7 +93,7 @@ namespace GoFishAreas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var returnUrl = Url.Content("~/Asset/Index");
+            var returnUrl = Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

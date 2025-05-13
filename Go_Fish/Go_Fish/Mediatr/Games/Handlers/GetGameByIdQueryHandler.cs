@@ -3,6 +3,7 @@ using Mediatr.Games.Queries;
 using Mediatr.Games.Responses;
 using GoFish.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Mediatr.Games.Handlers
 {
@@ -17,23 +18,31 @@ namespace Mediatr.Games.Handlers
 
         public async Task<GamesGetByIdResponse> Handle(GetGameByIdQuery request, CancellationToken cancellationToken)
         {
-            var game = await _context.Games
+            try
+            {
+                var game = await _context.Games
                 .AsNoTracking()
                 .FirstOrDefaultAsync(g => g.Id == request.Id, cancellationToken);
 
-            if (game == null) return null;
+                if (game == null) return null;
 
-            return new GamesGetByIdResponse
+                return new GamesGetByIdResponse
+                {
+                    Id = game.Id,
+                    Name = game.Name,
+                    CreatedOn = game.CreatedOn,
+                    CreatedById = game.CreatedById,
+                    IsCompleted = game.IsCompleted,
+                    CompletedAt = game.CompletedAt,
+                    WinnerPlayerId = game.WinnerPlayerId,
+                    CurrentTurnPlayerId = game.CurrentTurnPlayerId
+                };
+            }
+            catch (Exception exception)
             {
-                Id = game.Id,
-                Name = game.Name,
-                CreatedOn = game.CreatedOn,
-                CreatedById = game.CreatedById,
-                IsCompleted = game.IsCompleted,
-                CompletedAt = game.CompletedAt,
-                WinnerPlayerId = game.WinnerPlayerId,
-                CurrentTurnPlayerId = game.CurrentTurnPlayerId
-            };
+                Log.Logger.Error($"{nameof(GetGameByIdQueryHandler)} failed. \r\n Message: \r\n {exception.Message} \r\n Stacktrace: \r\n {exception.StackTrace} \r\n --------------------------- End of Error ---------------------------");
+                return new GamesGetByIdResponse { };
+            }
         }
     }
 }

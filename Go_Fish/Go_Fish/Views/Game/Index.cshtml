@@ -1,0 +1,162 @@
+﻿@model GamesGetListResponse
+@using Mediatr.Games.Responses;
+
+@{
+    ViewData["Title"] = "Games";
+}
+
+<div id="app">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center pl-3 pb-4 pr-3 bg-white">
+                        <h5 class="m-0">Games</h5>
+                        <button class="btn btn-primary"
+                                style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"
+                                onclick="openAddModal()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="col-12 mb-3">
+                        @(Html.DevExtreme()
+                            .TextBox()
+                            .Placeholder("Search")
+                            .ID("searchBox")
+                            .OnInput("changeGamesFilter")
+                            .StylingMode(EditorStylingMode.Underlined)
+                            .Height("50px"))
+                    </div>
+                    <div class="row">
+                        <div class="row" id="gameCardsContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Game Modal -->
+    <div id="addGameModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Made modal larger -->
+            <div class="modal-content shadow-lg rounded">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Game</h5>
+                    <button type="button" class="close fs-4" onclick="closeAddModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    
+
+                    @* <div class="form-group">
+                    @(Html.DevExtreme().NumberBox().ID("units").Height("50px").Placeholder("Number of units"))
+                    </div> *@
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;" onclick="closeAddModal()"><i class="fas fa-close"></i></button>
+                    <button type="button" class="btn btn-primary" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;" onclick="createGame()"><i class="fas fa-check"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            autocomplete: null,
+            games: null,
+            filteredGames: null,
+        },
+        mounted() {
+            this.games = @Html.Raw(Json.Serialize(Model.Games));
+            this.filteredGames = @Html.Raw(Json.Serialize(Model.Games));
+            this.renderGameCards();
+        },
+        methods: {
+            renderGameCards() {
+                let container = $('#gameCardsContainer');
+                container.empty();
+                this.filteredGames.forEach(game => {
+                    let cardHtml = `
+                            <div class="col-md-4">
+                                <div class="game-card position-relative">
+                                    <h5 class="text-primary">${game.Name}</h5>
+                                    <label>${game.GameType.Name}</label>
+
+                                    <a href="/Game/View?gameId=${game.Id}" class="btn btn-primary view-button" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>`;
+                    container.append(cardHtml);
+                });
+            },
+            openAddModal() {
+                $("#addGameModal").modal("show");
+                setTimeout(() => {
+                    this.initAutocomplete(); // Ensure Autocomplete initializes in modal
+                }, 100);
+            },
+            filterGames(searchText) {
+                if (!searchText) {
+                    this.filteredGames = this.games; // Show all games when input is cleared
+                    this.renderGameCards();
+                    return;
+                }
+
+                searchText = searchText.toLowerCase();
+                this.filteredGames = this.games.filter(game =>
+                    game.Name.toLowerCase().includes(searchText) ||
+                    game.GameType.Name.toLowerCase().includes(searchText) ||
+                    game.Address.toLowerCase().includes(searchText));
+                this.renderGameCards();
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var vueInstance = document.getElementById("app").__vue__;
+        if (vueInstance) vueInstance.renderGameCards();
+    });
+
+    function changeGamesFilter(e) {
+        const inputValue = e.event?.target?.value || "";
+        const vueInstance = document.getElementById("app").__vue__;
+        if (vueInstance) vueInstance.filterGames(inputValue);
+    }
+
+    function Edit(container, options) {
+        if (options.rowType === "data") {
+            var html = '<a class="btn btn-primary" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;" href="/Game/View?gameId=' + options.data.Id + '">View</a>';
+            $(container).append(html);
+        }
+    }
+
+    function openAddModal() {
+        var vueInstance = document.getElementById("app").__vue__;
+        if (vueInstance) vueInstance.openAddModal();
+    }
+
+    function closeAddModal() {
+        $("#addGameModal").modal("hide");
+    }
+
+    function showValidationError(id, message) {
+        const container = $(`#${id}-validation`);
+        container.text(message).removeClass("d-none");
+    }
+
+    function clearValidationErrors() {
+        $(".invalid-feedback").addClass("d-none");
+    }
+
+    $('#addGameModal').on('shown.bs.modal', function () {
+        const $body = $(this).find('.modal-body');
+        $body.addClass('animate-logo');
+
+        setTimeout(() => {
+            $body.removeClass('animate-logo');
+        }, 2000); // match the animation duration
+    });
+</script>
