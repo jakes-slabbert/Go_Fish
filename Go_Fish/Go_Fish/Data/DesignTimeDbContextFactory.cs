@@ -1,4 +1,4 @@
-﻿using GoFishData;
+﻿using GoFish.Data;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 

@@ -23,7 +23,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Serilog;
 using System.Text.RegularExpressions;
-using GoFishData.Entities;
+using GoFish.Data.Entities;
 
 namespace GoFishAreas.Identity.Pages.Account
 {

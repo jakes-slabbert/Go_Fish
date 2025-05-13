@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using GoFishData.Entities;
+using GoFish.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.AspNetCore.Identity;

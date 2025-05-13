@@ -1,7 +1,7 @@
 ﻿using GoFish.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace GoFishData.Entities
+namespace GoFish.Data.Entities
 {
 	public class AppUser : IdentityUser<Guid>
 	{

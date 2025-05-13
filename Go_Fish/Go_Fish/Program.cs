@@ -1,5 +1,5 @@
 
-using GoFishData;
+using GoFish.Data;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +11,7 @@ using Serilog;
 using Serilog.Events;
 
 using Microsoft.AspNetCore.Identity.UI.Services;
-using GoFishData.Entities;
+using GoFish.Data.Entities;
 using DevExpress.XtraCharts;
 using GoFish.Services.CurrentUser;
 using MediatR;

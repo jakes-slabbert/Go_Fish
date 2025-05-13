@@ -1,4 +1,4 @@
-﻿using GoFishData.Entities;
+﻿using GoFish.Data.Entities;
 
 namespace GoFish.Data.Entities
 {

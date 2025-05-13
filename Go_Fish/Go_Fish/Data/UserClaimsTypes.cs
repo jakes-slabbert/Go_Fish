@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace GoFishData
+namespace GoFish.Data
 {
     public class UserClaimsTypes : IdentityUserClaim<int>
     {

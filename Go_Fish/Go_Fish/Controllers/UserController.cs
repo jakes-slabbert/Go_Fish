@@ -1,5 +1,5 @@
-﻿using GoFishData;
-using GoFishData.Entities;
+﻿using GoFish.Data;
+using GoFish.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,12 +1,12 @@
 ﻿
 
-using GoFishData.Entities;
+using GoFish.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GoFishData
+namespace GoFish.Data
 {
     public static class DatabaseExtensions
     {

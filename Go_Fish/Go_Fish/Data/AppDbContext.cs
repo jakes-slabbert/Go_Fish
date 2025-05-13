@@ -1,10 +1,10 @@
 ﻿using GoFish.Data.Entities;
 using GoFish.Services;
-using GoFishData.Entities;
+using GoFish.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace GoFishData
+namespace GoFish.Data
 {
     public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {

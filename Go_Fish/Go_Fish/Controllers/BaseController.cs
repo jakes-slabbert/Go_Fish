@@ -1,4 +1,4 @@
-﻿using GoFishData;
+﻿using GoFish.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

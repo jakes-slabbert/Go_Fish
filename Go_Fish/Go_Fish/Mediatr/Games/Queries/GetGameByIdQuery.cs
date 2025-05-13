@@ -3,7 +3,5 @@ using Mediatr.Games.Responses;
 
 namespace Mediatr.Games.Queries
 {
-    public class GamesGetByIdQuery : IRequest<GamesGetByIdResponse>
-    {
-    }
+    public record GetGameByIdQuery(Guid Id) : IRequest<GamesGetByIdResponse>;
 }
