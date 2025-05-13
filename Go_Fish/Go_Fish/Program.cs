@@ -1,6 +1,5 @@
 
 using GoFish.Data;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
 using Serilog.Events;
-
-using Microsoft.AspNetCore.Identity.UI.Services;
 using GoFish.Data.Entities;
-using DevExpress.XtraCharts;
 using GoFish.Services.CurrentUser;
-using MediatR;
 using System.Reflection;
-using GoFish.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
