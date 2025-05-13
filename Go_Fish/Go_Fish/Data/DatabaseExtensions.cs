@@ -39,6 +39,9 @@ namespace GoFish.Data
             user = EnsureUser(db, "FusionTree Support", "support@fusiontree.co.za");
             CreateRoles(userRoles, db, user);
 
+            user = EnsureUser(db, "Silvan Thus", "silvan@tmm.nl");
+            CreateRoles(userRoles, db, user);
+
             Log.Information("Done with MRD - {For}", db.Database.GetDbConnection().Database);
         }
 
