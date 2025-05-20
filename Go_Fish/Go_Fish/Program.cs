@@ -158,6 +158,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseEndpoints(endpoints =>
+{
+    ControllerActionEndpointConventionBuilder controllerActionEndpointConventionBuilder = endpoints.MapControllers(); // important for API controllers
+});
+
 app.MapRazorPages();
 
 Log.Logger = new LoggerConfiguration()

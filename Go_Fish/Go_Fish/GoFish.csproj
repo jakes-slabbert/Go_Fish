@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Enumerations\" />
     <Folder Include="Data\StoredProcedures\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Logs\" />

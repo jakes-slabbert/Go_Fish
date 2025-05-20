@@ -1,0 +1,152 @@
+﻿@model GamesGetListResponse
+@using Mediatr.Games.Responses;
+
+@{
+    ViewData["Title"] = "Games";
+}
+
+@Html.AntiForgeryToken()
+
+<div id="app">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center pl-3 pb-4 pr-3 bg-white">
+                        <h5 class="m-0">Games</h5>
+                        <button class="btn btn-primary"
+                                style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"
+                                onclick="createGame()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control form-control-lg" id="searchBox" placeholder="Search" oninput="changeGamesFilter(event)" />
+                    </div>
+                    <div class="row" id="gameCardsContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for feedback -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+        <div id="toastMessage" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const toastElement = document.getElementById("toastMessage");
+        const toastBody = toastElement.querySelector(".toast-body");
+
+        function showToast(message, type = "primary") {
+            toastElement.classList.remove("bg-primary", "bg-danger", "bg-success");
+            toastElement.classList.add(`bg-${type}`);
+            toastBody.innerText = message;
+            new bootstrap.Toast(toastElement).show();
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                games: [],
+                filteredGames: []
+            },
+            mounted() {
+                this.games = @Html.Raw(Json.Serialize(Model.Games));
+                this.filteredGames = this.games;
+                this.renderGameCards();
+            },
+            methods: {
+                renderGameCards() {
+                    const container = $('#gameCardsContainer');
+                    container.empty();
+                    this.filteredGames.forEach(game => {
+                        const cardHtml = `
+                                <div class="col-md-4">
+                                    <div class="game-card position-relative p-3 border rounded mb-3 shadow-sm bg-light">
+                                        <h5 class="text-primary">${game.Name}</h5>
+                                        <a href="/Games/View/${game.Id}"
+                                           class="btn btn-primary view-button position-absolute top-0 end-0 mt-2 me-2"
+                                           style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>`;
+                        container.append(cardHtml);
+                    });
+                },
+                filterGames(searchText) {
+                    if (!searchText) {
+                        this.filteredGames = this.games;
+                    } else {
+                        searchText = searchText.toLowerCase();
+                        this.filteredGames = this.games.filter(game =>
+                            game.Name.toLowerCase().includes(searchText) ||
+                            game.GameType.Name.toLowerCase().includes(searchText) ||
+                            game.Address.toLowerCase().includes(searchText));
+                    }
+                    this.renderGameCards();
+                }
+            }
+        });
+
+        function changeGamesFilter(e) {
+            const value = e.target.value || "";
+            const vueInstance = document.getElementById("app").__vue__;
+            if (vueInstance) vueInstance.filterGames(value);
+        }
+
+        async function createGame() {
+
+            const payload = {
+                Name: null,
+                Players: []
+            };
+
+            try {
+                const response = await fetch("/Games/CreateGame", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    showToast("Failed to create game.", "danger");
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.Success && result.Game) {
+                    showToast("Game created! Let's go!", "success");
+
+                    // Redirect to the game view page
+                    window.location.href = `/Games/View/${result.Game}`;
+                } else {
+                    showToast("Failed to retrieve created game.", "danger");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("An error occurred.", "danger");
+            }
+        }
+
+        function showValidationError(id, message) {
+            const container = $(`#${id}-validation`);
+            container.text(message).removeClass("d-none");
+        }
+
+        function clearValidationErrors() {
+            $(".text-danger").addClass("d-none").text("");
+        }
+    </script>
+}

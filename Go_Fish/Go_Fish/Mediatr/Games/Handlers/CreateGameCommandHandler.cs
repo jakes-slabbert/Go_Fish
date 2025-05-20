@@ -4,6 +4,8 @@ using GoFish.Data.Entities;
 using GoFish.Data;
 using GoFish.Services.CurrentUser;
 using Serilog;
+using GoFish.Mediatr.GameCards.DomainEvents;
+using GoFish.Services;
 
 namespace Mediatr.Games.Handlers
 {
@@ -11,11 +13,13 @@ namespace Mediatr.Games.Handlers
     {
         private readonly AppDbContext _context;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IMediator _mediator;
 
-        public CreateGameCommandHandler(AppDbContext context, ICurrentUserService currentUserService)
+        public CreateGameCommandHandler(AppDbContext context, ICurrentUserService currentUserService, IMediator mediator)
         {
             _context = context;
             _currentUserService = currentUserService;
+            _mediator = mediator;
         }
 
         public async Task<Guid> Handle(CreateGameCommand request, CancellationToken cancellationToken)
@@ -23,10 +27,14 @@ namespace Mediatr.Games.Handlers
             try
             {
                 var currentUserId = _currentUserService.UserId;
+
+                var name = string.IsNullOrWhiteSpace(request.Name)
+                            ? GameNameGenerator.Generate()
+                            : request.Name;
+
                 var game = new Game
                 {
-                    Id = Guid.NewGuid(),
-                    Name = request.Name,
+                    Name = name,
                     CreatedOn = DateTimeOffset.UtcNow,
                     CreatedById = currentUserId ?? throw new ArgumentNullException(nameof(currentUserId)),
                     Players = new List<GamePlayer>()
@@ -35,7 +43,6 @@ namespace Mediatr.Games.Handlers
                 // Add current user as the first player
                 game.Players.Add(new GamePlayer
                 {
-                    Id = Guid.NewGuid(),
                     Name = "You",
                     Game = game,
                     GameId = game.Id,
@@ -53,7 +60,6 @@ namespace Mediatr.Games.Handlers
                     {
                         game.Players.Add(new GamePlayer
                         {
-                            Id = Guid.NewGuid(),
                             Name = player.Name,
                             Game = game,
                             GameId = game.Id,
@@ -70,7 +76,6 @@ namespace Mediatr.Games.Handlers
                     // Add a computer player if no players provided
                     game.Players.Add(new GamePlayer
                     {
-                        Id = Guid.NewGuid(),
                         Name = "Computer",
                         Game = game,
                         GameId = game.Id,
@@ -83,6 +88,15 @@ namespace Mediatr.Games.Handlers
 
                 _context.Games.Add(game);
                 await _context.SaveChangesAsync(cancellationToken);
+
+                var currentTurnPlayerId = _context.GamePlayers.Single(g => g.UserId == currentUserId && g.GameId == game.Id);
+
+                game.CurrentTurnPlayerId = currentTurnPlayerId.Id;
+
+                _context.Attach(game);
+                await _context.SaveChangesAsync(cancellationToken);
+                // Raise domain event
+                await _mediator.Publish(new GameCreatedDomainEvent(game.Id), cancellationToken);
 
                 return game.Id;
             }

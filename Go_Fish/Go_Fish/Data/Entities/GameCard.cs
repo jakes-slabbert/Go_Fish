@@ -1,4 +1,6 @@
-﻿namespace GoFish.Data.Entities
+﻿using GoFish.Data.Enumerations;
+
+namespace GoFish.Data.Entities
 {
     public class GameCard : BaseEntity
     {
@@ -14,5 +16,7 @@
         public bool InDeck { get; set; } = true;
         public bool IsBooked { get; set; } = false;
         public bool IsVisibleToAll { get; set; } = false;
+
+        public Suite Suite { get; set; }
     }
 }

@@ -348,7 +348,7 @@ File: Main Css File
     }
 
     [data-theme=default][data-theme-colors=blue] {
-        --vz-primary: #2a5fc1;
+        --vz-primary: #129fd5;
         --vz-primary-rgb: 42, 95, 193;
         --vz-primary-bg-subtle: rgba(42, 95, 193, 0.15);
         --vz-primary-border-subtle: rgba(42, 95, 193, 0.3);
@@ -356,7 +356,7 @@ File: Main Css File
     }
 
     [data-theme=default] .card-radio .form-check-label[for=themeColor-01] {
-        background-color: #2c5efc;
+        background-color: #4cc2f0;
     }
 
     [data-theme=default] .card-radio .form-check-label[for=themeColor-02] {
@@ -368,7 +368,7 @@ File: Main Css File
     }
 
     [data-theme=default] .card-radio .form-check-label[for=themeColor-04] {
-        background-color: #2a5fc1;
+        background-color: #129fd5;
     }
 
 [data-theme=corporate] {
@@ -775,7 +775,7 @@ File: Main Css File
     }
 
     [data-theme=creative][data-theme-colors=green] {
-        --vz-primary: #2c5efc;
+        --vz-primary: #4cc2f0;
         --vz-primary-rgb: 10, 179, 156;
         --vz-primary-bg-subtle: rgba(10, 179, 156, 0.15);
         --vz-primary-border-subtle: rgba(10, 179, 156, 0.3);
@@ -989,7 +989,7 @@ File: Main Css File
     }
 
     [data-theme=galaxy][data-theme-colors=blue] {
-        --vz-primary: #2a5fc1;
+        --vz-primary: #129fd5;
         --vz-primary-rgb: 42, 95, 193;
         --vz-primary-bg-subtle: rgba(42, 95, 193, 0.15);
         --vz-primary-border-subtle: rgba(42, 95, 193, 0.3);
@@ -1009,7 +1009,7 @@ File: Main Css File
     }
 
     [data-theme=galaxy] .card-radio .form-check-label[for=themeColor-04] {
-        background-color: #2a5fc1;
+        background-color: #129fd5;
     }
 
     [data-theme=galaxy] .card::before, [data-theme=galaxy] .card::after {
@@ -1597,7 +1597,7 @@ File: Main Css File
     }
 
     [data-theme=material][data-theme-colors=blue] {
-        --vz-primary: #2a5fc1;
+        --vz-primary: #129fd5;
         --vz-primary-rgb: 42, 95, 193;
         --vz-primary-bg-subtle: rgba(42, 95, 193, 0.15);
         --vz-primary-border-subtle: rgba(42, 95, 193, 0.3);
@@ -1617,7 +1617,7 @@ File: Main Css File
     }
 
     [data-theme=material] .card-radio .form-check-label[for=themeColor-04] {
-        background-color: #2a5fc1;
+        background-color: #129fd5;
     }
 
     [data-theme=material] .material-shadow-none {
@@ -1820,7 +1820,7 @@ File: Main Css File
     }
 
     [data-theme=minimal][data-theme-colors=blue] {
-        --vz-primary: #2a5fc1;
+        --vz-primary: #129fd5;
         --vz-primary-rgb: 42, 95, 193;
         --vz-primary-bg-subtle: rgba(42, 95, 193, 0.15);
         --vz-primary-border-subtle: rgba(42, 95, 193, 0.3);
@@ -1840,7 +1840,7 @@ File: Main Css File
     }
 
     [data-theme=minimal] .card-radio .form-check-label[for=themeColor-04] {
-        background-color: #2a5fc1;
+        background-color: #129fd5;
     }
 
 [data-theme=modern] {
@@ -3399,7 +3399,7 @@ body {
 
 .hamburger-icon {
     stroke: none;
-    background: linear-gradient(90deg, #2a5fc1, #204791);
+    background: linear-gradient(90deg, #129fd5, #204791);
     border: none;
     border-radius: 50%;
     height: 26px;
@@ -7663,7 +7663,7 @@ a {
 
 .btn-primary-gradient {
     --vz-btn-color: #fff;
-    background-image: linear-gradient(90deg, #2a5fc1, #00e7ff);
+    background-image: linear-gradient(90deg, #129fd5, #00e7ff);
     --vz-btn-border-color: var(--vz-primary);
     --vz-btn-hover-bg: #2550D6;
     --vz-btn-hover-border-color: #2550D6;
@@ -8754,7 +8754,7 @@ a {
 
 .dropdownmenu-primary .dropdown-item:is(:focus, :hover, .active) {
     background-color: rgba(64, 81, 137, 0.07);
-    color: #2c5efc;
+    color: #4cc2f0;
 }
 
 .dropdownmenu-secondary .dropdown-item:is(:focus, :hover, .active) {
@@ -8764,7 +8764,7 @@ a {
 
 .dropdownmenu-success .dropdown-item:is(:focus, :hover, .active) {
     background-color: rgba(10, 179, 156, 0.07);
-    color: #2c5efc;
+    color: #4cc2f0;
 }
 
 .dropdownmenu-info .dropdown-item:is(:focus, :hover, .active) {
@@ -11276,7 +11276,7 @@ div.code-toolbar > .toolbar {
         border-radius: 0.2rem !important;
         border: 1px solid rgba(64, 81, 137, 0.35) !important;
         background-color: transparent;
-        color: #2c5efc !important;
+        color: #4cc2f0 !important;
         box-shadow: none !important;
     }
 
@@ -11286,7 +11286,7 @@ div.code-toolbar > .toolbar {
         }
 
         div.code-toolbar > .toolbar button:hover {
-            background-color: #2c5efc !important;
+            background-color: #4cc2f0 !important;
             color: #fff !important;
         }
 
@@ -13596,7 +13596,7 @@ button.gridjs-sort-asc, button.gridjs-sort-desc {
     color: #fff;
     font-size: 16px;
     line-height: 40px;
-    background: #2c5efc;
+    background: #4cc2f0;
     border-radius: 4px;
     padding: 10px 20px;
 }
@@ -17945,7 +17945,7 @@ span.flatpickr-weekday {
 
         .chat-list > li.active a .badge {
             background-color: rgba(var(--vz-success-rgb), 0.15) !important;
-            color: #2c5efc !important;
+            color: #4cc2f0 !important;
         }
 
     .chat-list > li a {
@@ -20154,3 +20154,44 @@ button {
     .dx-radiogroup.pretty-radio-group .dx-item .dx-radiobutton-text {
         font-weight: 400;
     }
+
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+    .form-group input {
+        width: 100%;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        outline: none;
+        padding: 8px 0;
+        font-size: 16px;
+        background: transparent;
+        transition: border-color 0.3s;
+        border-radius: 0;
+    }
+
+        .form-group input:focus {
+            border-bottom: 2px solid #007bff;
+        }
+
+    .form-group label {
+        position: absolute;
+        left: 0;
+        top: 10px;
+        font-size: 16px;
+        color: #777;
+        transition: 0.3s ease;
+    }
+
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label {
+        top: -12px;
+        font-size: 14px;
+        color: #007bff;
+    }
+
+.form-control:focus {
+    box-shadow: none !important;
+}

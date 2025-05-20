@@ -5,6 +5,7 @@ using GoFish.Services.CurrentUser;
 using GoFish.Data;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
+using GoFish.Models;
 
 namespace Mediatr.Games.Handlers
 {
@@ -27,7 +28,19 @@ namespace Mediatr.Games.Handlers
 
                 var games = _appDbContext.Games
                     .Include(g => g.Players)
-                    .Where(a => a.Players.Select(p => p.UserId).ToList().Contains(userId) && a.DeletedOn == null);
+                    .Where(a => a.Players.Select(p => p.UserId).ToList().Contains(userId) && a.DeletedOn == null && a.IsCompleted == false)
+                    .Select(a => new GameDto 
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Players = a.Players.Select(p => new PlayerDto 
+                        {
+                            Id = p.Id,
+                            UserId = p.UserId,
+                            Name = p.Name
+                        }).ToList(),
+
+                    });
 
                 return new GamesGetListResponse
                 {
